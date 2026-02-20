@@ -1,0 +1,40 @@
+# =========================
+# Line endings
+# =========================
+# Auto normalize line endings for text files
+* text=auto
+
+# Java files
+*.java text
+
+# Properties / config files
+*.properties text
+*.yml text
+*.yaml text
+*.json text
+
+# Shell scripts (keep LF)
+*.sh text eol=lf
+
+# Docker files
+Dockerfile text
+docker-compose*.yml text
+
+# =========================
+# Binary files
+# =========================
+*.jar binary
+*.war binary
+*.ear binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+
+# =========================
+# Merge / diff rules
+# =========================
+# Prevent Git from trying to merge minified files
+*.min.js merge=ours
+*.min.css merge=ours

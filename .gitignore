@@ -1,0 +1,53 @@
+# =========================
+# Java / Spring Boot
+# =========================
+# Maven / Gradle build outputs
+target/
+build/
+
+# Compiled class files
+*.class
+
+# Logs
+*.log
+
+# Spring Boot generated files
+*.jar
+*.war
+*.ear
+
+# =========================
+# IDEs
+# =========================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# Eclipse
+*.project
+*.classpath
+*.settings/
+
+# =========================
+# OS files
+# =========================
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+
+# =========================
+# Docker / Environment
+# =========================
+# Ignore environment variables / secrets
+.env
+.env.local
+*.secret
+
+# Docker generated files (optional, if you generate locally)
+docker-compose.override.yml
