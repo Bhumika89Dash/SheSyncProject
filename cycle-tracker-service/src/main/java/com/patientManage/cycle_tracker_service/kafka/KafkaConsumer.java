@@ -22,9 +22,38 @@ public class KafkaConsumer {
         this.healthProfileService = healthProfileService;
         this.symptomLogService = symptomLogService;
     }
-
     @KafkaListener(topics = "patient", groupId = "cycle-tracker-service")
-    public void consumeEvent(byte[] event, Acknowledgment ack) {
+    public void consumeEvent(byte[] event) {
+
+        try {
+            PatientEvent patientEvent = PatientEvent.parseFrom(event);
+
+            UUID patientId = UUID.fromString(patientEvent.getPatientId());
+            String name = patientEvent.getName();
+            String email = patientEvent.getEmail();
+            String eventType = patientEvent.getEventType();
+
+            log.info("📥 Patient Event Consumed");
+            log.info("📌 Event Type : {}", eventType);
+            log.info("📌 Patient ID : {}", patientId);
+            log.info("📌 Name       : {}", name);
+            log.info("📌 Email      : {}", email);
+
+            healthProfileService.createDefaultIfNotExists(patientId);
+            symptomLogService.createDefaultIfNotExists(patientId);
+
+            log.info("✅ Default HealthProfile and SymptomLog created for {}", patientId);
+
+        } catch (Exception e) {
+            log.error("❌ Error processing patient event", e);
+        }
+    }
+
+
+
+    /*
+    @KafkaListener(topics = "patient", groupId = "cycle-tracker-service")
+    public void consumeEvent(byte[] event) {
 
         try {
             PatientEvent patientEvent = PatientEvent.parseFrom(event);
@@ -34,13 +63,13 @@ public class KafkaConsumer {
 
             healthProfileService.createDefaultIfNotExists(patientId);
             symptomLogService.createDefaultIfNotExists(patientId);
-            // VERY IMPORTANT LINE
-            ack.acknowledge();
+
+
 
         } catch (Exception e) {
             log.error("Error processing patient event", e);
-            // DO NOT ACKNOWLEDGE -> Kafka will retry
+
         }
-    }
+    }*/
 
 }

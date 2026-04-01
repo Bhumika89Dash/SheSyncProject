@@ -42,7 +42,12 @@ public class KafkaConsumer {
 
             emailSenderService.sendEmail(email);
 
-        } catch (Exception e) {
+        }catch (InvalidProtocolBufferException e) {
+            log.error("Failed to parse PatientEvent protobuf message", e);
+            throw new RuntimeException("Kafka retry: Event parsing failed", e);
+
+        }
+        catch (Exception e) {
             log.error("Failed to process patient event", e);
             throw new RuntimeException("Kafka retry: Email sending failed", e);
         }

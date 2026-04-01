@@ -1,49 +1,51 @@
 server:
-  port: 4004
-
+  port: ${PORT:4004}
 
 auth:
   service:
-    url: ${AUTH_SERVICE_URL:http://localhost:4005}
-
+    url: ${AUTH_SERVICE_URL}
 
 spring:
   cloud:
     gateway:
       routes:
+
+        # ---------------- PATIENT ----------------
         - id: patient-service
-          uri: http://patient-service:4000
+          uri: ${PATIENT_SERVICE_URL}
           predicates:
-            - Path=/api/patients
             - Path=/api/patients/**
           filters:
             - StripPrefix=1
             - JwtValidation
 
+        # ---------------- AUTH ----------------
         - id: auth-service-route
-          uri: http://auth-service:4005
+          uri: ${AUTH_SERVICE_URL}
           predicates:
             - Path=/auth/**
           filters:
             - StripPrefix=1
 
+        # ---------------- API DOCS PATIENT ----------------
         - id: api-docs-patient-route
-          uri: http://patient-service:4000
+          uri: ${PATIENT_SERVICE_URL}
           predicates:
-            - Path= /api-docs/patients
+            - Path=/api-docs/patients
           filters:
-            - RewritePath= /api-docs/patients,/v3/api-docs
+            - RewritePath=/api-docs/patients,/v3/api-docs
 
+        # ---------------- API DOCS AUTH ----------------
         - id: api-docs-auth-route
-          uri: http://auth-service:4005
+          uri: ${AUTH_SERVICE_URL}
           predicates:
-            - Path= /api-docs/auth
+            - Path=/api-docs/auth
           filters:
-            - RewritePath= /api-docs/auth,/v3/api-docs
+            - RewritePath=/api-docs/auth,/v3/api-docs
 
         # ---------------- CYCLE ----------------
         - id: cycle-tracker-cycles
-          uri: http://cycle-tracker-service:4006
+          uri: ${CYCLE_SERVICE_URL}
           predicates:
             - Path=/api/cycles/**
           filters:
@@ -52,7 +54,7 @@ spring:
 
         # ---------------- AI INSIGHTS ----------------
         - id: cycle-tracker-ai
-          uri: http://cycle-tracker-service:4006
+          uri: ${CYCLE_SERVICE_URL}
           predicates:
             - Path=/api/ai/insights/**
           filters:
@@ -61,7 +63,7 @@ spring:
 
         # ---------------- HEALTH PROFILE ----------------
         - id: cycle-tracker-health
-          uri: http://cycle-tracker-service:4006
+          uri: ${CYCLE_SERVICE_URL}
           predicates:
             - Path=/api/health-profile/**
           filters:
@@ -70,7 +72,7 @@ spring:
 
         # ---------------- SYMPTOMS ----------------
         - id: cycle-tracker-symptoms
-          uri: http://cycle-tracker-service:4006
+          uri: ${CYCLE_SERVICE_URL}
           predicates:
             - Path=/api/symptoms/**
           filters:
